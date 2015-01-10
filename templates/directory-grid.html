@@ -1,0 +1,125 @@
+<style type="text/css">
+.dentry {
+  position: relative;
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin: 20px;
+  background: #FFFFFF;
+  text-align: center;
+}
+
+.dentry-img
+{
+  color: #262524;
+-webkit-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.5);
+-moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.5);
+box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.5);
+border-radius: 10px;
+
+  width: 150px;
+  height: 130px;
+}
+
+.img-responsive
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.dentry-icon
+{
+  color: #262524;
+-webkit-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.5);
+-moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.5);
+box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.5);
+border-radius: 10px;
+  width: 150px;
+  height: 130px;
+	padding-left: 35px;
+	padding-right: 35px;
+	padding-top: 15px;
+	padding-bottom: 25px;
+	font-size: 80px;
+}
+.dentry-label
+{
+  padding: 1px;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.0.0/isotope.pkgd.min.js"></script>
+<script src="/static/js/bootstrap-contextmenu.js"></script>
+
+<!-- Your custom menu with dropdown-menu as default styling -->
+	      <div id="context-menu">
+	      	<ul class="dropdown-menu" role="menu">
+            <li><a tabindex="-1">Action</a></li>
+	           <li><a tabindex="-1">Another action</a></li>
+	           <li><a tabindex="-1">Something else here</a></li>
+	           <li class="divider"></li>
+	           <li><a tabindex="-1">Separated link</a></li>
+	      	</ul>
+	      </div>
+
+<script type="text/javascript">
+$(document).ready(function ()
+{
+	var $container = $('#directory').isotope(
+	{
+		getSortData:
+		{
+			name: '.name',
+			type: '[data-type]',
+			mtime: '[data-mtime] parseInt',
+			size: '[data-size] parseInt',
+		},
+		transitionDuration: '0',
+		sortAscending:
+		{
+    		name: true,
+			type: true,
+			mtime: false,
+			size: false
+		}
+	});
+
+	$('#sorts').on( 'click', 'button', function()
+	{
+		var sortByValue = $(this).attr('data-sort-by');
+		$container.isotope({ sortBy: sortByValue });
+	});
+});
+</script>
+
+<h2><i class="fa fa-fw fa-sort"></i> Sort</h2>
+<div id="sorts" class="button-group">  <button class="button is-checked" data-sort-by="original-order">original order</button>
+  <button class="button" data-sort-by="name">name</button>
+  <button class="button" data-sort-by="type">type</button>
+  <button class="button" data-sort-by="mtime">mtime</button>
+  <button class="button" data-sort-by="size">size</button>
+</div>
+
+<div id="directory">
+
+		{%- for entry in entries -%}
+
+		<div data-toggle="context" data-target="#context-menu" class="dentry" data-type="{{entry.type}}" {% if entry.type == 'file' %} data-mtime="{{ entry.mtime_raw }}" data-size="{{ entry.size_raw }}" {%else%} data-mtime="0" data-size="0"{%endif%}>
+			{% if entry.img_preview %}
+			<div class="dentry-img" style="overflow: hidden">
+				<img src="{{ entry.img_preview }}" class="img-responsive"/>
+			</div>
+			{%else%}
+			<div class="dentry-icon">
+					<span class="{{ entry.icon }}"></span>
+			</div>
+			{%endif%}
+			<div class="name dentry-label">{{ entry.name|truncate(17,killwords=True)}}</div>
+		</div>
+
+		{% endfor %}
+</div>
+
