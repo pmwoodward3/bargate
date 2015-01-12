@@ -35,7 +35,7 @@
 					{%- include 'dropdown-menus.html' %}
 					</ul>
 					
-					<ul class="nav navbar-nav navbar-right">
+					<!--<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown{%if active == 'user'%} active{%endif%}">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-user"></i> {{ session.username }} <b class="caret"></b></a>
 							<ul class="dropdown-menu">
@@ -44,14 +44,23 @@
 								<li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
 							</ul>
 						</li>
-					</ul>
+					</ul>-->
 					
 					<div class="pull-right action-btns">
+						<a class="btn navbar-btn btn-default hidden-xs" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="Sort options" {% if not browse_mode %}disabled="disabled"{%endif%}>
+							<i class="fa fa-fw fa-lg fa-sort"></i>
+						</a>
 						<a id="upload-button" data-toggle="modal" href="#upload-file" class="btn navbar-btn btn-default btn hidden-xs" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="Upload a file" {% if not browse_mode %}disabled="disabled"{%endif%}>
 							<i id="upload-button-icon" class="fa fa-fw fa-lg fa-upload"></i>
 						</a>
 						<a data-toggle="modal" href="#create-directory" class="btn navbar-btn btn-default hidden-xs" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="Create a folder" {% if not browse_mode %}disabled="disabled"{%endif%}>
 							<i class="fa fa-fw fa-lg fa-folder-open"></i>
+						</a>
+						<a class="btn navbar-btn btn-default hidden-xs" href="{{ url_for('settings') }}" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="Settings">
+							<i class="fa fa-fw fa-lg fa-cog"></i>
+						</a>
+						<a class="btn navbar-btn btn-default hidden-xs" href="{{ url_for('logout') }}" rel="tooltip" data-toggle="tooltip" data-placement="bottom" title="Logout ">
+							<i class="fa fa-fw fa-lg fa-sign-out"></i>
 						</a>
 					</div>
 				</div>

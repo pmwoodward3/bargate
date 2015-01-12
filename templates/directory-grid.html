@@ -1,12 +1,13 @@
 <style type="text/css">
+
 .dentry {
   position: relative;
   float: left;
   width: 150px;
   height: 150px;
   margin: 20px;
-  background: #FFFFFF;
   text-align: center;
+  cursor: pointer;
 }
 
 .dentry-img
@@ -40,9 +41,9 @@ border-radius: 10px;
   height: 130px;
 	padding-left: 35px;
 	padding-right: 35px;
-	padding-top: 15px;
+	padding-top: 30px;
 	padding-bottom: 25px;
-	font-size: 80px;
+	font-size: 50px;
 }
 .dentry-label
 {
@@ -54,7 +55,6 @@ border-radius: 10px;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.0.0/isotope.pkgd.min.js"></script>
 <script src="/static/js/bootstrap-contextmenu.js"></script>
 
-<!-- Your custom menu with dropdown-menu as default styling -->
 	      <div id="context-menu">
 	      	<ul class="dropdown-menu" role="menu">
             <li><a tabindex="-1">Action</a></li>
@@ -74,8 +74,8 @@ $(document).ready(function ()
 		{
 			name: '.name',
 			type: '[data-type]',
-			mtime: '[data-mtime] parseInt',
-			size: '[data-size] parseInt',
+			mtime: '[data-rawmtime] parseInt',
+			size: '[data-rawsize] parseInt',
 		},
 		transitionDuration: '0',
 		sortAscending:
@@ -96,18 +96,30 @@ $(document).ready(function ()
 </script>
 
 <h2><i class="fa fa-fw fa-sort"></i> Sort</h2>
-<div id="sorts" class="button-group">  <button class="button is-checked" data-sort-by="original-order">original order</button>
-  <button class="button" data-sort-by="name">name</button>
-  <button class="button" data-sort-by="type">type</button>
-  <button class="button" data-sort-by="mtime">mtime</button>
-  <button class="button" data-sort-by="size">size</button>
+<div id="sorts" class="button-group btn-group">  
+  <button class="button is-checked btn btn-default" data-sort-by="original-order">original order</button>
+  <button class="button btn btn-default" data-sort-by="name">name</button>
+  <button class="button btn btn-default" data-sort-by="type">type</button>
+  <button class="button btn btn-default" data-sort-by="mtime">mtime</button>
+  <button class="button btn btn-default" data-sort-by="size">size</button>
 </div>
+
 
 <div id="directory">
 
 		{%- for entry in entries -%}
 
-		<div data-toggle="context" data-target="#context-menu" class="dentry" data-type="{{entry.type}}" {% if entry.type == 'file' %} data-mtime="{{ entry.mtime_raw }}" data-size="{{ entry.size_raw }}" {%else%} data-mtime="0" data-size="0"{%endif%}>
+
+		{%- if entry.type == 'file' -%}
+			{%- if on_file_click == 'ask' %}
+				<div data-toggle="context" data-target="#context-menu" class="dentry dentry-preview" data-type="{{entry.type}}" data-rawmtime="{{ entry.mtime_raw }}" data-rawsize="{{ entry.size_raw }}" data-icon="{{entry.icon}}" {% if entry.img_preview %}data-imgpreview="{{ entry.img_preview }}" {%endif%} {% if entry.bdownload %}data-view="{{ entry.bdownload }}" {%endif%} data-download="{{ entry.download }}" data-mtype="{{entry.mtype}}" data-props="{{ entry.view }}" data-filename="{{entry.name}}" data-mtime="{{entry.mtime}}" data-size="{{entry.size}}" data-path="{{entry.path}}" data-url="{{ entry.default_open}}">
+			{%- else %}
+				<div data-toggle="context" data-target="#context-menu" class="dentry dentry-open" data-type="{{entry.type}}" data-rawmtime="{{ entry.mtime_raw }}" data-rawsize="{{ entry.size_raw }}" data-url="{{ entry.on_file_click }}" data-filename="{{entry.name}}" data-path="{{entry.path}}">
+			{%- endif %}
+		{%- else -%}
+			<div data-toggle="context" data-target="#context-menu" class="dentry dentry-open" data-type="{{entry.type}}" data-rawmtime="0" data-rawsize="0" data-url="{{ entry.default_open }}" data-filename="{{entry.name}}" data-path="{{entry.path}}">
+		{%- endif %}
+
 			{% if entry.img_preview %}
 			<div class="dentry-img" style="overflow: hidden">
 				<img src="{{ entry.img_preview }}" class="img-responsive"/>
@@ -120,6 +132,11 @@ $(document).ready(function ()
 			<div class="name dentry-label">{{ entry.name|truncate(17,killwords=True)}}</div>
 		</div>
 
+		{% else %}
+
+		<div class="alert
+
 		{% endfor %}
+		
 </div>
 

@@ -82,6 +82,50 @@ $(document).ready(function($)
 	{
 		$(this).parent().removeClass('dropup');
 	});
+
+	/* NEW STUFF FOR GRID VIEW */
+	$(".dentry-open").click(function()
+	{
+		window.document.location = $(this).data('url');
+	});
+	
+	$(".dentry-preview").click(function()
+	{
+		var parent = $(this)
+		
+		$('#file-click-filename').text(parent.data('filename'));
+		$('#file-click-size').text(parent.data('size'));
+		$('#file-click-mtime').text(parent.data('mtime'));
+		$('#file-click-mtype').text(parent.data('mtype'));
+		$('#file-click-icon').attr('class',parent.data('icon'));
+		$('#file-click-download').attr('href',parent.data('download'));
+		$('#file-click-props').attr('href',parent.data('props'));
+		
+		if (parent.attr('data-imgpreview'))
+		{
+			$('#file-click-preview').attr('src',parent.data('imgpreview'));
+			$('#file-click-preview').removeClass('hidden');
+			$('#file-click-icon').addClass('hidden');
+		}
+		else
+		{
+			$('#file-click-preview').attr('src','');
+			$('#file-click-view').addClass('hidden');
+			$('#file-click-icon').removeClass('hidden');
+		}
+		
+		if (parent.attr('data-view'))
+		{
+			$('#file-click-view').attr('href',parent.data('view'));
+			$('#file-click-view').removeClass('hidden');
+		}
+		else
+		{
+			$('#file-click-view').addClass('hidden');
+		}
+		
+		$('#file-click').modal();
+	});
 	  
 });
 
